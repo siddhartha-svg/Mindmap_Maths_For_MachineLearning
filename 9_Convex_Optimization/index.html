@@ -1,1 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+<title>Convex Optimization for Machine Learning — Mind Map</title>
+<style>
+  :root{
+    --bg-top:#eaf1f8;
+    --bg-bot:#c9dced;
+    --ink:#1c2b3a;
+    --node-border:#2f5f8f;
+    --node-fill:#ffffff;
+    --node-text:#16283c;
+    --formula-bg:#fbf3df;
+    --formula-border:#c9a86a;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    background:linear-gradient(180deg,var(--bg-top),var(--bg-bot));
+    font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);
+    overflow:hidden;
+    height:100%;
+    width:100%;
+  }
+  #viewport{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    touch-action:pan-x pan-y pinch-zoom;
+  }
+  #scaler{
+    position:absolute;
+    top:0;left:0;
+    transform-origin:top left;
+  }
+  .header{
+    text-align:center;
+    padding:22px 10px 8px;
+  }
+  .header h1{
+    margin:0;
+    font-size:30px;
+    letter-spacing:.5px;
+    font-weight:700;
+    color:#12263d;
+  }
+  .header p{
+    margin:6px 0 0;
+    font-size:13px;
+    color:#4a6480;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  #stage{
+    position:relative;
+    width:2700px;
+    height:2600px;
+    margin:0 auto;
+  }
+  svg.connectors{
+    position:absolute;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+  }
+  .ring{
+    position:absolute;
+    border-radius:50%;
+    border:1px dashed rgba(70,100,130,0.22);
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+  }
+  .center{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:160px;height:160px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #4d7fb5, #16324f 75%);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    font-weight:800;
+    font-size:17px;
+    box-shadow:0 8px 24px rgba(20,40,60,0.35);
+    border:4px solid #fff;
+    z-index:5;
+    text-align:center;
+    line-height:1.15;
+  }
+  .center span{font-size:11px;font-weight:500;opacity:.85;letter-spacing:1px;}
 
+  .node{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    background:var(--node-fill);
+    border:2px solid var(--node-border);
+    border-radius:10px;
+    padding:7px 13px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--node-text);
+    white-space:nowrap;
+    box-shadow:0 3px 8px rgba(20,40,70,0.12);
+    z-index:4;
+  }
+  .node.branch{
+    font-size:14px;
+    padding:9px 15px;
+    border-width:2.5px;
+    z-index:6;
+    color:#fff;
+  }
+  .node.leaf{
+    font-weight:500;
+    font-size:12px;
+    padding:6px 11px;
+    box-shadow:0 2px 5px rgba(20,40,70,0.10);
+  }
+  .node.app{
+    background:#12263d;
+    color:#fff;
+    border-color:#12263d;
+    font-weight:600;
+    font-size:11.5px;
+  }
+  .formula-box{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    background:var(--formula-bg);
+    border:1.5px solid var(--formula-border);
+    border-radius:8px;
+    padding:7px 12px;
+    font-size:12px;
+    font-style:italic;
+    color:#5a4522;
+    white-space:nowrap;
+    box-shadow:0 3px 8px rgba(90,70,30,0.15);
+    z-index:6;
+  }
+  .legend{
+    position:absolute;
+    top:24px;
+    right:24px;
+    background:#12263d;
+    color:#fff;
+    padding:14px 18px;
+    border-radius:10px;
+    font-size:11.5px;
+    line-height:1.85;
+    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+    z-index:10;
+    width:230px;
+  }
+  .legend b{display:block;font-size:13px;margin-bottom:6px;letter-spacing:.5px;}
+  .swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle;}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+  <div id="scaler">
+    <div class="header">
+      <h1>Convex Optimization for Machine Learning</h1>
+      <p>Convex Sets, Duality, Algorithms &amp; Where They Guarantee Global Optima</p>
+    </div>
+
+    <div id="stage">
+      <div class="ring" style="width:850px;height:850px;"></div>
+      <div class="ring" style="width:1450px;height:1450px;"></div>
+      <div class="ring" style="width:2100px;height:2100px;"></div>
+      <div class="ring" style="width:2600px;height:2600px;"></div>
+
+      <svg class="connectors" id="svg"></svg>
+
+      <div class="center">AI/ML<span>CONVEX OPT.</span></div>
+
+      <div class="legend">
+        <b>LEGEND</b>
+        <span class="swatch" style="background:#3f6fa8"></span>Foundations / Core<br>
+        <span class="swatch" style="background:#7a5fa8"></span>Problem Types / Duality<br>
+        <span class="swatch" style="background:#3f8f6f"></span>Algorithms<br>
+        <span class="swatch" style="background:#b25a4f"></span>Regularization / Stats Links<br>
+        <span class="swatch" style="background:#0d1b28"></span>Advanced / Large-Scale<br>
+        <span class="swatch" style="background:#fbf3df;border:1.5px solid #c9a86a;display:inline-block"></span>Formula<br>
+        <span class="swatch" style="background:#12263d"></span>ML Application
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="zoom-controls" style="position:fixed;bottom:16px;right:16px;z-index:50;display:flex;gap:8px;">
+  <button onclick="rescale(1.15)" style="width:40px;height:40px;border-radius:50%;border:none;background:#12263d;color:#fff;font-size:18px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">+</button>
+  <button onclick="rescale(0.87)" style="width:40px;height:40px;border-radius:50%;border:none;background:#12263d;color:#fff;font-size:18px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">−</button>
+  <button onclick="fitToScreen()" style="height:40px;padding:0 14px;border-radius:20px;border:none;background:#3f6fa8;color:#fff;font-size:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3);">Fit</button>
+</div>
+
+<script>
+const cx = 1350, cy = 1300;
+const stage = document.getElementById('stage');
+const svg = document.getElementById('svg');
+
+const COLORS = {
+  core:"#3f6fa8",
+  types:"#7a5fa8",
+  algo:"#3f8f6f",
+  reg:"#b25a4f",
+  adv:"#0d1b28"
+};
+
+const branches = [
+  { label:"Foundations", color:COLORS.core, r:370,
+    kids:["Objective Function","Decision Variables","Feasible Set / Region","Constraints","Optimal Solution"] },
+  { label:"Convex Sets", color:COLORS.core, r:390,
+    kids:["Affine Sets","Convex Hull","Hyperplanes","Halfspaces","Polyhedra","Convex Cones"] },
+  { label:"Convex Functions", color:COLORS.core, r:380,
+    kids:["Concave Functions","Strictly Convex","Strongly Convex","Jensen's Inequality","Epigraph"] },
+  { label:"Differentiability", color:COLORS.core, r:380,
+    kids:["Gradient","Hessian Matrix","PSD Hessian","First / Second-Order Conditions"] },
+  { label:"Convex Optimization Problems", color:COLORS.types, r:400,
+    kids:["Linear Programming (LP)","Quadratic Programming (QP)","SOCP","Semidefinite Programming (SDP)","Geometric Programming"] },
+  { label:"Constrained Optimization", color:COLORS.types, r:380,
+    kids:["Equality Constraints","Inequality Constraints","Active Constraints","Constraint Qualification"] },
+  { label:"Lagrangian Theory", color:COLORS.types, r:400,
+    kids:["Lagrangian Function","Lagrange Multipliers","KKT Conditions","Complementary Slackness","Strong / Weak Duality"] },
+  { label:"Unconstrained Optimization", color:COLORS.algo, r:390,
+    kids:["Gradient Descent","Newton's Method","BFGS / L-BFGS","Conjugate Gradient"] },
+  { label:"Convex Optimization Algorithms", color:COLORS.algo, r:410,
+    kids:["Projected Gradient Descent","Interior Point Methods","Barrier / Penalty Methods","ADMM","Mirror Descent"] },
+  { label:"Proximal Optimization", color:COLORS.algo, r:390,
+    kids:["Proximal Operator","Proximal Gradient Descent","ISTA / FISTA","Coordinate Descent"] },
+  { label:"Numerical Convex Optimization", color:COLORS.algo, r:400,
+    kids:["Line Search","Trust Region","Convergence Analysis","Convergence Rate"] },
+  { label:"Regularization", color:COLORS.reg, r:380,
+    kids:["L1 Regularization","L2 Regularization","Elastic Net","Group Lasso","Nuclear Norm"] },
+  { label:"Statistical Learning Connections", color:COLORS.reg, r:400,
+    kids:["Empirical Risk Minimization","Structural Risk Minimization","Bias–Variance Tradeoff","Convex Loss Functions"] },
+  { label:"Applications in ML", color:COLORS.reg, r:390,
+    kids:["Sparse Learning","Feature Selection","Compressed Sensing","Matrix Completion","Kernel Learning"] },
+  { label:"Large-Scale Convex Optimization", color:COLORS.adv, r:400,
+    kids:["Distributed Optimization","Parallel Optimization","Stochastic Convex Opt.","Online Convex Opt."] },
+  { label:"Advanced Convex Optimization", color:COLORS.adv, r:400,
+    kids:["Fenchel Duality","Fenchel Conjugate","Subgradient Methods","Subdifferential"] },
+];
+
+const N = branches.length;
+branches.forEach((b,i)=>{ b.angle = (360/N)*i; });
+
+const apps = [
+  {label:"Linear Regression → Least Squares Optimization", angle:0, r:1160},
+  {label:"Logistic Regression → Convex Loss Optimization", angle:22.5, r:1160},
+  {label:"Ridge Regression → L2 Regularization", angle:45, r:1140},
+  {label:"Lasso Regression → L1 Regularization", angle:67.5, r:1140},
+  {label:"Elastic Net → Mixed Regularization", angle:90, r:1140},
+  {label:"SVM → Quadratic Programming", angle:112.5, r:1140},
+  {label:"Feature Selection → Sparse Optimization", angle:135, r:1140},
+  {label:"Compressed Sensing → Convex Optimization", angle:157.5, r:1160},
+  {label:"Matrix Completion → Nuclear Norm Optimization", angle:180, r:1180},
+  {label:"Graphical Models → Graphical Lasso", angle:202.5, r:1140},
+  {label:"Large-Scale ML → Distributed / Stochastic Convex Opt.", angle:225, r:1200},
+  {label:"Kernel SVM → Convex Duality", angle:247.5, r:1120},
+  {label:"PCA → Convex Relaxations", angle:270, r:1120},
+  {label:"Collaborative Filtering → Matrix Completion", angle:292.5, r:1160},
+  {label:"Robust Regression → Convex Loss Functions", angle:315, r:1140},
+  {label:"Reinforcement Learning → Convex Policy Optimization", angle:337.5, r:1180},
+];
+
+const formulas = [
+  {label:"∇f(x*) + Σλᵢ∇gᵢ(x*) = 0  (KKT)", angle:180, r:700},
+  {label:"L(x,λ,ν) = f(x) + λᵀg(x) + νᵀh(x)", angle:157.5, r:700},
+  {label:"d* = p*  (Strong Duality)", angle:157.5, r:780},
+  {label:"prox_f(v) = argmin_x [f(x)+½‖x−v‖²]", angle:247.5, r:700},
+  {label:"min ‖Ax−b‖² + λ‖x‖₁", angle:270, r:700},
+];
+
+function pt(angleDeg, r){
+  const a = angleDeg * Math.PI/180;
+  return { x: cx + r*Math.cos(a), y: cy + r*Math.sin(a) };
+}
+
+function makeNode(cls, text, x, y){
+  const d = document.createElement('div');
+  d.className = cls;
+  d.style.left = x+'px';
+  d.style.top = y+'px';
+  d.innerText = text;
+  stage.appendChild(d);
+  return d;
+}
+
+function line(x1,y1,x2,y2,color,width){
+  const ln = document.createElementNS("http://www.w3.org/2000/svg","line");
+  ln.setAttribute("x1",x1); ln.setAttribute("y1",y1);
+  ln.setAttribute("x2",x2); ln.setAttribute("y2",y2);
+  ln.setAttribute("stroke",color);
+  ln.setAttribute("stroke-width",width);
+  ln.setAttribute("opacity","0.55");
+  svg.appendChild(ln);
+}
+
+const center = {x:cx, y:cy};
+
+branches.forEach(b=>{
+  const bp = pt(b.angle, b.r);
+  line(center.x, center.y, bp.x, bp.y, b.color, 2.5);
+  const bn = makeNode('node branch', b.label, bp.x, bp.y);
+  bn.style.background = b.color;
+  bn.style.borderColor = b.color;
+
+  const n = b.kids.length;
+  const step = Math.min(9, 42/n);
+  b.kids.forEach((label,i)=>{
+    const off = (i - (n-1)/2) * step;
+    const rr = b.r + 260 + (i%3)*55;
+    const kp = pt(b.angle + off, rr);
+    line(bp.x, bp.y, kp.x, kp.y, b.color, 1.3);
+    makeNode('node leaf', label, kp.x, kp.y);
+  });
+});
+
+formulas.forEach(f=>{
+  const p = pt(f.angle, f.r);
+  line(cx, cy, p.x, p.y, "#c9a86a", 1);
+  const d = document.createElement('div');
+  d.className = 'formula-box';
+  d.style.left = p.x+'px'; d.style.top = p.y+'px';
+  d.innerText = f.label;
+  stage.appendChild(d);
+});
+
+apps.forEach(a=>{
+  const p = pt(a.angle, a.r);
+  line(center.x, center.y, p.x, p.y, "#12263d", 0.8);
+  makeNode('node leaf app', a.label, p.x, p.y);
+});
+
+// ---- Fit-to-screen scaling + drag to pan ----
+const viewport = document.getElementById('viewport');
+const scaler = document.getElementById('scaler');
+let currentScale = 1;
+let panX = 0, panY = 0;
+
+function applyTransform(){
+  scaler.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+}
+
+function fitToScreen(){
+  const stageW = stage.offsetWidth + 400;
+  const stageH = stage.offsetHeight + 240;
+  const vw = viewport.clientWidth;
+  const vh = viewport.clientHeight;
+  const scaleX = vw / stageW;
+  const scaleY = vh / stageH;
+  currentScale = Math.min(scaleX, scaleY) * 0.98;
+  panX = (vw - stageW*currentScale)/2;
+  panY = 10;
+  applyTransform();
+}
+
+function rescale(factor){
+  currentScale *= factor;
+  applyTransform();
+}
+
+window.addEventListener('load', fitToScreen);
+window.addEventListener('resize', fitToScreen);
+
+let isDown=false, startX=0, startY=0, startPanX=0, startPanY=0;
+viewport.addEventListener('pointerdown',(e)=>{
+  isDown=true; startX=e.clientX; startY=e.clientY; startPanX=panX; startPanY=panY;
+  viewport.setPointerCapture(e.pointerId);
+});
+viewport.addEventListener('pointermove',(e)=>{
+  if(!isDown) return;
+  panX = startPanX + (e.clientX-startX);
+  panY = startPanY + (e.clientY-startY);
+  applyTransform();
+});
+viewport.addEventListener('pointerup',()=>{isDown=false;});
+viewport.addEventListener('pointercancel',()=>{isDown=false;});
+</script>
+
+</body>
+</html>
