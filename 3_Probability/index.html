@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
-<title>Statistics for Machine Learning — Mind Map</title>
+<title>Probability for Machine Learning — Mind Map</title>
 <style>
   :root{
     --bg-top:#eaf1f8;
@@ -168,8 +168,8 @@
 <div id="viewport">
   <div id="scaler">
     <div class="header">
-      <h1>Statistics for Machine Learning</h1>
-      <p>Descriptive, Inferential &amp; Multivariate Statistics — Mind Map</p>
+      <h1>Probability for Machine Learning</h1>
+      <p>Foundations, Bayesian Methods, Information Theory &amp; ML Applications</p>
     </div>
 
     <div id="stage">
@@ -180,15 +180,15 @@
 
       <svg class="connectors" id="svg"></svg>
 
-      <div class="center">AI/ML<span>STATISTICS</span></div>
+      <div class="center">AI/ML<span>PROBABILITY</span></div>
 
       <div class="legend">
         <b>LEGEND</b>
-        <span class="swatch" style="background:#3f6fa8"></span>Core / Descriptive<br>
-        <span class="swatch" style="background:#7a5fa8"></span>Inference / Bayesian<br>
-        <span class="swatch" style="background:#3f8f6f"></span>Modeling / Regression<br>
-        <span class="swatch" style="background:#b25a4f"></span>Advanced / Multivariate<br>
-        <span class="swatch" style="background:#0d1b28"></span>Resampling Methods<br>
+        <span class="swatch" style="background:#3f6fa8"></span>Core Probability<br>
+        <span class="swatch" style="background:#7a5fa8"></span>Bayesian / Likelihood<br>
+        <span class="swatch" style="background:#3f8f6f"></span>Statistics / Info Theory<br>
+        <span class="swatch" style="background:#b25a4f"></span>Stochastic / Sampling<br>
+        <span class="swatch" style="background:#0d1b28"></span>Theory / Inequalities<br>
         <span class="swatch" style="background:#fbf3df;border:1.5px solid #c9a86a;display:inline-block"></span>Formula<br>
         <span class="swatch" style="background:#12263d"></span>ML Application
       </div>
@@ -209,72 +209,70 @@ const svg = document.getElementById('svg');
 
 const COLORS = {
   core:"#3f6fa8",
-  inf:"#7a5fa8",
-  model:"#3f8f6f",
-  adv:"#b25a4f",
-  resample:"#0d1b28"
+  bayes:"#7a5fa8",
+  stats:"#3f8f6f",
+  stoch:"#b25a4f",
+  theory:"#0d1b28"
 };
 
 const branches = [
   { label:"Foundations", color:COLORS.core, r:360,
-    kids:["Population vs Sample","Types of Variables","Levels of Measurement","Sampling Methods","Sampling Bias"] },
-  { label:"Descriptive Statistics", color:COLORS.core, r:370,
-    kids:["Mean, Median, Mode","Range","Quartiles / IQR","Variance","Standard Deviation"] },
-  { label:"Data Visualization", color:COLORS.core, r:350,
-    kids:["Histogram","Box Plot","Scatter Plot","QQ Plot"] },
-  { label:"Distribution Analysis", color:COLORS.core, r:380,
-    kids:["Skewness","Kurtosis","Z-Score","Standardization","Empirical Rule"] },
-  { label:"Correlation", color:COLORS.core, r:370,
-    kids:["Covariance","Pearson Correlation","Spearman Correlation","Correlation Matrix"] },
-  { label:"Statistical Inference", color:COLORS.inf, r:380,
-    kids:["Sampling Distribution","Standard Error","Confidence Interval","Point / Interval Estimation"] },
-  { label:"Hypothesis Testing", color:COLORS.inf, r:390,
-    kids:["Null / Alt. Hypothesis","Significance Level (α)","p-value","Type I / II Error","Statistical Power"] },
-  { label:"Statistical Tests", color:COLORS.inf, r:390,
-    kids:["Z-Test","t-Test","Chi-Square Test","ANOVA","Mann–Whitney U"] },
-  { label:"Bayesian Statistics", color:COLORS.inf, r:380,
-    kids:["Prior Distribution","Posterior Distribution","Credible Interval","Bayesian Updating"] },
-  { label:"Regression Analysis", color:COLORS.model, r:380,
-    kids:["Linear / Multiple Regression","Polynomial Regression","R² / Adjusted R²","Residual Analysis"] },
-  { label:"Feature Relationships", color:COLORS.model, r:380,
-    kids:["Multicollinearity","VIF","Feature Importance","Mutual Information"] },
-  { label:"Statistical Modeling", color:COLORS.model, r:370,
-    kids:["Bias–Variance Tradeoff","Overfitting","Underfitting","Model Assumptions"] },
-  { label:"Multivariate Statistics", color:COLORS.adv, r:390,
-    kids:["Covariance Matrix","PCA","LDA","Factor Analysis"] },
-  { label:"Time Series Statistics", color:COLORS.adv, r:380,
-    kids:["Trend & Seasonality","Stationarity","Autocorrelation","Moving Average"] },
-  { label:"Resampling Methods", color:COLORS.resample, r:370,
-    kids:["Bootstrap","Cross Validation","Stratified CV","LOOCV"] },
+    kids:["Sample Space","Events","Probability Axioms","Probability Rules"] },
+  { label:"Counting Techniques", color:COLORS.core, r:350,
+    kids:["Permutations","Combinations","Factorials"] },
+  { label:"Conditional Probability", color:COLORS.core, r:370,
+    kids:["Conditional Probability","Joint Probability","Marginal Probability","Independence"] },
+  { label:"Bayes' Theorem", color:COLORS.bayes, r:380,
+    kids:["Bayes' Rule","Prior Probability","Posterior Probability","Likelihood","Evidence","Bayesian Inference"] },
+  { label:"Random Variables", color:COLORS.core, r:370,
+    kids:["Discrete RV","Continuous RV","PMF","PDF","CDF"] },
+  { label:"Probability Distributions", color:COLORS.core, r:390,
+    kids:["Bernoulli","Binomial","Poisson","Normal (Gaussian)","Exponential","Beta","Chi-Square"] },
+  { label:"Expectations & Variance", color:COLORS.stats, r:370,
+    kids:["Expected Value","Variance","Standard Deviation","Covariance","Correlation"] },
+  { label:"Information Theory", color:COLORS.stats, r:380,
+    kids:["Entropy","Cross Entropy","KL Divergence","Mutual Information"] },
+  { label:"Likelihood & Estimation", color:COLORS.bayes, r:380,
+    kids:["Likelihood Function","Log-Likelihood","MLE","MAP"] },
+  { label:"Sampling Methods", color:COLORS.stoch, r:380,
+    kids:["Monte Carlo Sampling","Importance Sampling","Rejection Sampling","Sampling With/Without Replacement"] },
+  { label:"Probability Inequalities", color:COLORS.theory, r:370,
+    kids:["Markov Inequality","Chebyshev Inequality","Jensen's Inequality","Hoeffding Inequality"] },
+  { label:"Limit Theorems", color:COLORS.theory, r:360,
+    kids:["Law of Large Numbers","Central Limit Theorem"] },
+  { label:"Stochastic Processes", color:COLORS.stoch, r:380,
+    kids:["Markov Chains","Hidden Markov Models","Gaussian Processes"] },
+  { label:"Probabilistic Models", color:COLORS.bayes, r:390,
+    kids:["Bayesian Networks","Graphical Models","Latent Variable Models","Mixture Models","Gaussian Mixture Models"] },
 ];
 
 const N = branches.length;
 branches.forEach((b,i)=>{ b.angle = (360/N)*i; });
 
 const apps = [
-  {label:"Linear / Logistic Regression → Regression Analysis", angle:0, r:1100},
-  {label:"Random Forest / XGBoost → Feature Importance", angle:24, r:1080},
-  {label:"PCA / LDA → Multivariate Statistics", angle:48, r:1080},
-  {label:"Naive Bayes → Bayesian Statistics", angle:72, r:1080},
-  {label:"K-Means / GMM → Descriptive Stats", angle:96, r:1080},
-  {label:"SVM → Statistical Tests / Margins", angle:120, r:1080},
-  {label:"A/B Testing → Hypothesis Testing", angle:144, r:1080},
-  {label:"Hyperparameter Tuning → Cross Validation", angle:168, r:1100},
-  {label:"Ensemble Learning → Bootstrap / Resampling", angle:192, r:1100},
-  {label:"Feature Selection → Feature Relationships", angle:216, r:1100},
-  {label:"Time Series Forecasting → Time Series Stats", angle:240, r:1100},
-  {label:"Neural Nets → Bias–Variance / Regularization", angle:264, r:1100},
-  {label:"Model Evaluation → Confidence Interval, p-value", angle:288, r:1100},
-  {label:"Ridge / Lasso → Multicollinearity Control", angle:312, r:1080},
-  {label:"Bayesian Models → Prior / Posterior", angle:336, r:1080},
+  {label:"Naive Bayes → Bayes' Theorem", angle:0, r:1080},
+  {label:"Logistic / Linear Regression → Likelihood", angle:26, r:1080},
+  {label:"Decision Trees → Entropy", angle:51, r:1080},
+  {label:"Random Forest / XGBoost → Boosting + Probability", angle:77, r:1100},
+  {label:"GMM → Mixture Models", angle:103, r:1080},
+  {label:"HMM / Kalman Filters → Stochastic Processes", angle:129, r:1100},
+  {label:"Reinforcement Learning → MDPs", angle:154, r:1080},
+  {label:"EM Algorithm → MLE + Latent Variables", angle:180, r:1100},
+  {label:"Variational Inference → Bayesian Inference", angle:206, r:1100},
+  {label:"VAE / GAN / Diffusion → Probabilistic Modeling", angle:231, r:1100},
+  {label:"Bayesian Neural Networks → Posterior Estimation", angle:257, r:1100},
+  {label:"Transformers / LLMs → Probability Distributions", angle:283, r:1100},
+  {label:"Gaussian Processes → Kernel-based Inference", angle:309, r:1080},
+  {label:"Monte Carlo Methods → Sampling", angle:334, r:1080},
 ];
 
 const formulas = [
-  {label:"z = (x − μ) / σ", angle:96, r:660},
-  {label:"CI = x̄ ± z·(σ/√n)", angle:168, r:660},
-  {label:"r = Cov(X,Y) / (σx·σy)", angle:48, r:680},
-  {label:"R² = 1 − SSres/SStot", angle:0, r:700},
-  {label:"Err = Bias² + Variance + ε", angle:264, r:660},
+  {label:"P(A|B) = P(B|A)P(A) / P(B)", angle:77, r:700},
+  {label:"H(X) = −Σ p(x)·log p(x)", angle:180, r:660},
+  {label:"D_KL(P‖Q) = Σ p(x)·log(p(x)/q(x))", angle:206, r:700},
+  {label:"E[X] = Σ x·p(x)", angle:180, r:600},
+  {label:"θ_MLE = argmax L(θ)", angle:257, r:660},
+  {label:"N(x;μ,σ²) = (1/√2πσ²)e^(−(x−μ)²/2σ²)", angle:129, r:700},
 ];
 
 function pt(angleDeg, r){
